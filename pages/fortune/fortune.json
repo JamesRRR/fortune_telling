@@ -1,0 +1,12 @@
+{
+  "usingComponents": {},
+  "navigationBarTitleText": "算命小助手",
+  "navigationBarBackgroundColor": "#FFF5F5",
+  "navigationBarTextStyle": "black",
+  "enablePullDownRefresh": false,
+  "disableScroll": false,
+  "navigationStyle": "default",
+  "backgroundColor": "#FFF5F5",
+  "backgroundTextStyle": "dark",
+  "restartStrategy": "homePage"
+} 

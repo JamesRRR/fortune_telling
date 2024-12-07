@@ -1,0 +1,34 @@
+# 依赖包
+node_modules/
+venv/
+__pycache__/
+*.pyc
+
+# 环境配置
+.env
+.env.local
+.env.*.local
+
+# 编辑器配置
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# 小程序特定文件
+project.private.config.json
+miniprogram_npm/
+
+# 日志文件
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 临时文件
+temp/
+.temp/ 

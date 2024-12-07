@@ -1,0 +1,39 @@
+<view class="container">
+  <!-- 顶部标题区域 -->
+  <view class="header">
+    <text class="title">✨算命小助手✨</text>
+    <text class="subtitle">来问问你的未来吧~</text>
+  </view>
+
+  <view class="chat-container">
+    <scroll-view scroll-y="true" class="chat-list" scroll-into-view="{{scrollToView}}">
+      <block wx:for="{{messages}}" wx:key="index">
+        <view class="message {{item.type}}" id="msg-{{index}}">
+          <view class="avatar {{item.type}}-avatar"></view>
+          <view class="message-content">{{item.content}}</view>
+        </view>
+      </block>
+      <!-- 添加加载动画 -->
+      <view class="loading" wx:if="{{isLoading}}">
+        <view class="loading-dots">
+          <view class="dot"></view>
+          <view class="dot"></view>
+          <view class="dot"></view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+  
+  <view class="input-container">
+    <input class="input-field" 
+           type="text" 
+           value="{{inputMessage}}"
+           bindinput="onInputChange"
+           placeholder="和我聊聊吧~"
+           confirm-type="send"
+           bindconfirm="sendMessage"/>
+    <button class="send-btn" bindtap="sendMessage">
+      <text class="send-icon">✨</text>
+    </button>
+  </view>
+</view>
