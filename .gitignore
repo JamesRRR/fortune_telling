@@ -10,7 +10,7 @@ __pycache__/
 .env.test
 .env.prod
 # 保留基础配置
-!.env.common
+.env.common
 
 # 编辑器配置
 .idea/
