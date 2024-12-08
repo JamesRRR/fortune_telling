@@ -1,6 +1,6 @@
 const app = getApp();  // 获取全局 app 实例
 
-let isInitializing = false;  // 添加初始化锁
+let isPageLoaded = false;
 
 Page({
   data: {
@@ -11,16 +11,30 @@ Page({
   },
 
   onLoad() {
-    // 添加欢迎消息
-    this.setData({
-      messages: [{
-        type: 'assistant',
-        content: '✨ 你好呀！我是你的算命小助手，很高兴见到你！来问我点什么吧~ ✨'
-      }]
-    });
+    if (!isPageLoaded) {
+      this.setData({
+        messages: [{
+          type: 'assistant',
+          content: '✨ 你好呀！我是你的算命小助手，很高兴见到你！来问我点什么吧~ ✨'
+        }]
+      });
+      isPageLoaded = true;
+    }
   },
 
-  onInputChange(e) {
+  onUnload() {
+    // 清理定时器
+    if (this.sendMessageTimer) {
+      clearTimeout(this.sendMessageTimer);
+    }
+    isPageLoaded = false;
+  },
+
+  onShow() {
+    // 页面显示时的处理
+  },
+
+  bindinput(e) {
     this.setData({
       inputMessage: e.detail.value
     });
@@ -30,7 +44,18 @@ Page({
     const message = this.data.inputMessage.trim();
     if (!message || this.data.isLoading) return;
 
-    // 添加用户消息
+    // 添加防抖处理
+    if (this.sendMessageTimer) {
+      clearTimeout(this.sendMessageTimer);
+    }
+
+    this.sendMessageTimer = setTimeout(() => {
+      this._sendMessageToServer(message);
+    }, 300);
+  },
+
+  _sendMessageToServer(message) {
+    // 原来的发送消息逻辑
     const messages = [...this.data.messages, {
       type: 'user',
       content: message
@@ -45,7 +70,7 @@ Page({
 
     // 发送请求到后端
     wx.request({
-      url: 'http://your-backend-url/chat',
+      url: 'http://localhost:5001/chat',
       method: 'POST',
       data: {
         message: message

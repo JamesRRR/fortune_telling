@@ -7,6 +7,5 @@
   "disableScroll": false,
   "navigationStyle": "default",
   "backgroundColor": "#FFF5F5",
-  "backgroundTextStyle": "dark",
-  "restartStrategy": "homePage"
+  "backgroundTextStyle": "dark"
 } 

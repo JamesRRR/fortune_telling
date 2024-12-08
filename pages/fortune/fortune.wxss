@@ -52,17 +52,20 @@
   height: 80rpx;
   border-radius: 50%;
   margin: 0 20rpx;
-  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
 }
 
 .user-avatar {
-  background-image: url('path/to/user-avatar.png');
-  background-color: #FF69B4;
+  background: linear-gradient(45deg, #FF69B4, #FFB6C1);
+  color: white;
 }
 
 .assistant-avatar {
-  background-image: url('path/to/assistant-avatar.png');
-  background-color: #FFB6C1;
+  background: linear-gradient(45deg, #FFB6C1, #FFC0CB);
+  color: white;
 }
 
 .message-content {

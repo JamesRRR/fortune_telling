@@ -9,7 +9,9 @@
     <scroll-view scroll-y="true" class="chat-list" scroll-into-view="{{scrollToView}}">
       <block wx:for="{{messages}}" wx:key="index">
         <view class="message {{item.type}}" id="msg-{{index}}">
-          <view class="avatar {{item.type}}-avatar"></view>
+          <view class="avatar {{item.type}}-avatar">
+            {{item.type === 'user' ? '我' : '�'}}
+          </view>
           <view class="message-content">{{item.content}}</view>
         </view>
       </block>
@@ -28,7 +30,7 @@
     <input class="input-field" 
            type="text" 
            value="{{inputMessage}}"
-           bindinput="onInputChange"
+           bindinput="bindinput"
            placeholder="和我聊聊吧~"
            confirm-type="send"
            bindconfirm="sendMessage"/>
