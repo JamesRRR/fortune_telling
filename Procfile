@@ -1,1 +1,1 @@
-web: gunicorn wsgi:app 
+web: gunicorn backend.fortune_api:app 
