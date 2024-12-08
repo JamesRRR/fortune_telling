@@ -70,7 +70,7 @@ Page({
 
     // 发送请求到后端
     wx.request({
-      url: 'http://localhost:5001/chat',
+      url: 'https://your-railway-app-url/chat',
       method: 'POST',
       data: {
         message: message

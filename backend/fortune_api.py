@@ -13,9 +13,8 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# 加载环境变量
-load_dotenv("/Users/bingyanren/Documents/llm/fortune telling/.env")
-logger.info(f"OpenAI API Key: {os.getenv('OPENAI_API_KEY')[:8]}...")
+# 加载环境变量（优先使用环境变量，否则从.env文件加载）
+load_dotenv()  # 移除硬编码的路径
 
 app = Flask(__name__)
 CORS(app)
@@ -29,6 +28,14 @@ SYSTEM_PROMPT = """你是一个专业的算命师，擅长解答人们关于未�
 回答要体现专业性，可以适当引用一些命理概念。
 答案要保持积极向上，即使遇到不太好的预测也要给出改善的建议。
 请用中文回答。"""
+
+@app.route('/', methods=['GET'])
+def health_check():
+    """健康检查接口"""
+    return jsonify({
+        'status': 'healthy',
+        'message': '算命小助手后端服务正常运行中...'
+    })
 
 @app.route('/chat', methods=['POST'])
 def chat():
@@ -45,7 +52,6 @@ def chat():
             return jsonify({'error': '消息不能为空'}), 400
 
         logger.info("Calling OpenAI API...")
-        # 使用新的API调用方式
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
@@ -56,7 +62,6 @@ def chat():
         )
         logger.debug(f"OpenAI API response: {response}")
 
-        # 获取助手的回复
         assistant_response = response.choices[0].message.content
         logger.info(f"Assistant response: {assistant_response[:100]}...")
 
@@ -73,5 +78,6 @@ def chat():
         }), 500
 
 if __name__ == '__main__':
-    logger.info("Starting Flask server...")
-    app.run(host='0.0.0.0', port=5001, debug=True)
+    port = int(os.getenv('PORT', 5001))  # 使用环境变量中的端口或默认值
+    logger.info(f"Starting Flask server on port {port}...")
+    app.run(host='0.0.0.0', port=port)
