@@ -6,8 +6,11 @@ __pycache__/
 
 # 环境配置
 .env
-.env.local
-.env.*.local
+.env.dev
+.env.test
+.env.prod
+# 保留基础配置
+!.env.common
 
 # 编辑器配置
 .idea/

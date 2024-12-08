@@ -1,41 +1,80 @@
 <view class="container">
-  <!-- 顶部标题区域 -->
-  <view class="header">
-    <text class="title">✨算命小助手✨</text>
-    <text class="subtitle">来问问你的未来吧~</text>
-  </view>
+  <!-- 添加装饰元素 -->
+  <view class="decoration decoration-1">✨</view>
+  <view class="decoration decoration-2">🌟</view>
+  <view class="decoration decoration-3">⭐</view>
+  <view class="decoration decoration-4">✨</view>
 
-  <view class="chat-container">
-    <scroll-view scroll-y="true" class="chat-list" scroll-into-view="{{scrollToView}}">
-      <block wx:for="{{messages}}" wx:key="index">
-        <view class="message {{item.type}}" id="msg-{{index}}">
-          <view class="avatar {{item.type}}-avatar">
-            {{item.type === 'user' ? '我' : '�'}}
+  <!-- 专家选择区域 -->
+  <view class="expert-selection" wx:if="{{!selectedExpert && !skippedSelection}}">
+    <view class="section-title">选择您的算命大师</view>
+    <scroll-view scroll-y="true" class="experts-list">
+      <view class="expert-card" 
+            wx:for="{{experts}}" 
+            wx:key="id"
+            bindtap="selectExpert"
+            data-expert="{{item}}">
+        <view class="expert-avatar">{{item.avatar}}</view>
+        <view class="expert-info">
+          <view class="expert-name">{{item.name}}</view>
+          <view class="expert-desc">{{item.description}}</view>
+          <view class="expert-specialties">
+            <text class="specialty" wx:for="{{item.specialties}}" wx:key="*this">{{item}}</text>
           </view>
-          <view class="message-content">{{item.content}}</view>
         </view>
-      </block>
-      <!-- 添加加载动画 -->
-      <view class="loading" wx:if="{{isLoading}}">
-        <view class="loading-dots">
-          <view class="dot"></view>
-          <view class="dot"></view>
-          <view class="dot"></view>
-        </view>
+      </view>
+      <view class="skip-selection" bindtap="skipExpertSelection">
+        暂时不选，直接咨询 →
       </view>
     </scroll-view>
   </view>
-  
-  <view class="input-container">
-    <input class="input-field" 
-           type="text" 
-           value="{{inputMessage}}"
-           bindinput="bindinput"
-           placeholder="和我聊聊吧~"
-           confirm-type="send"
-           bindconfirm="sendMessage"/>
-    <button class="send-btn" bindtap="sendMessage">
-      <text class="send-icon">✨</text>
-    </button>
-  </view>
+
+  <!-- 聊天区域 -->
+  <block wx:if="{{selectedExpert || skippedSelection}}">
+    <view class="back-to-selection" bindtap="backToSelection">
+      <text class="back-icon">←</text>
+    </view>
+
+    <view class="header">
+      <view class="expert-info" wx:if="{{selectedExpert}}">
+        <view class="expert-avatar">{{selectedExpert.avatar}}</view>
+        <view class="expert-name">{{selectedExpert.name}}</view>
+      </view>
+      <text class="title" wx:else>✨算命小助手✨</text>
+      <text class="subtitle">来问问你的未来吧~</text>
+    </view>
+
+    <view class="chat-container">
+      <scroll-view scroll-y="true" class="chat-list" scroll-into-view="{{scrollToView}}">
+        <block wx:for="{{messages}}" wx:key="index">
+          <view class="message {{item.type}}" id="msg-{{index}}">
+            <view class="avatar {{item.type}}-avatar">
+              {{item.type === 'user' ? '我' : (selectedExpert ? selectedExpert.avatar : '✨')}}
+            </view>
+            <view class="message-content">{{item.content}}</view>
+          </view>
+        </block>
+        <view class="loading" wx:if="{{isLoading}}">
+          <view class="loading-dots">
+            <view class="dot"></view>
+            <view class="dot"></view>
+            <view class="dot"></view>
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+    
+    <view class="input-container">
+      <input class="input-field" 
+             type="text" 
+             value="{{inputMessage}}"
+             bindinput="bindinput"
+             placeholder="和我聊聊吧~"
+             confirm-type="send"
+             bindconfirm="sendMessage"/>
+      <button class="send-btn" bindtap="sendMessage">
+        <text class="send-icon">✨</text>
+      </button>
+    </view>
+  </block>
 </view>
