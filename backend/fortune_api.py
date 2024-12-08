@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from openai import OpenAI
+import openai  # 改回旧版本的导入方式
 import os
 from dotenv import load_dotenv
 import logging
@@ -13,14 +13,14 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# 加载环境变量（优先使用环境变量，否则从.env文件加载）
-load_dotenv()  # 移除硬编码的路径
+# 加载环境变量
+load_dotenv()
 
 app = Flask(__name__)
 CORS(app)
 
-# 初始化OpenAI客户端
-client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
+# 设置 OpenAI API 密钥
+openai.api_key = os.getenv('OPENAI_API_KEY')  # 使用旧版本的方式设置 API 密钥
 
 # 系统提示词
 SYSTEM_PROMPT = """你是一个专业的算命师，擅长解答人们关于未来、运势、情感等方面的问题。
@@ -52,7 +52,8 @@ def chat():
             return jsonify({'error': '消息不能为空'}), 400
 
         logger.info("Calling OpenAI API...")
-        response = client.chat.completions.create(
+        # 使用旧版本的 API 调用方式
+        response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": SYSTEM_PROMPT},
@@ -78,6 +79,6 @@ def chat():
         }), 500
 
 if __name__ == '__main__':
-    port = int(os.getenv('PORT', 5001))  # 使用环境变量中的端口或默认值
+    port = int(os.getenv('PORT', 5001))
     logger.info(f"Starting Flask server on port {port}...")
     app.run(host='0.0.0.0', port=port)
