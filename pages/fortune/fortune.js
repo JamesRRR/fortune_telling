@@ -70,7 +70,7 @@ Page({
 
     // 发送请求到后端
     wx.request({
-      url: 'https://your-railway-app-url/chat',
+      url: 'https://fortunetelling-production.up.railway.app/chat',
       method: 'POST',
       data: {
         message: message
