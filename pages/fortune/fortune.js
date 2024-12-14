@@ -1,9 +1,15 @@
-const app = getApp();  // 获取全局 app 实例
+console.log('Trying to require:', '../../config/experts');
+const experts = require('../../config/experts');
+const config = require('../../config/index');
 
+const app = getApp();
 let isPageLoaded = false;
 
 Page({
   data: {
+    experts: Object.values(experts),
+    selectedExpert: null,
+    skippedSelection: false,
     messages: [],
     inputMessage: '',
     scrollToView: '',
@@ -13,13 +19,37 @@ Page({
   onLoad() {
     if (!isPageLoaded) {
       this.setData({
-        messages: [{
-          type: 'assistant',
-          content: '✨ 你好呀！我是你的算命小助手，很高兴见到你！来问我点什么吧~ ✨'
-        }]
+        messages: []  // 清空默认消息，等待选择专家
       });
       isPageLoaded = true;
     }
+  },
+
+  selectExpert(e) {
+    const expert = e.currentTarget.dataset.expert;
+    this.setData({
+      selectedExpert: expert,
+      messages: [
+        ...this.data.messages,  // 保留现有消息
+        {
+          type: 'assistant',
+          content: `您好，我是${expert.name}，${expert.description}。请问有什么想问的吗？`
+        }
+      ]
+    });
+  },
+
+  skipExpertSelection() {
+    this.setData({
+      skippedSelection: true,
+      messages: [
+        ...this.data.messages,  // 保留现有消息
+        {
+          type: 'assistant',
+          content: '✨ 你好呀！我是你的小助手，很高兴见到你！来问我点什么吧~ ✨'
+        }
+      ]
+    });
   },
 
   onUnload() {
@@ -55,7 +85,6 @@ Page({
   },
 
   _sendMessageToServer(message) {
-    // 原来的发送消息逻辑
     const messages = [...this.data.messages, {
       type: 'user',
       content: message
@@ -68,12 +97,13 @@ Page({
       scrollToView: `msg-${messages.length - 1}`
     });
 
-    // 发送请求到后端
     wx.request({
-      url: 'https://your-railway-app-url/chat',
+      url: `${config.apiBaseUrl}/chat`,
       method: 'POST',
       data: {
-        message: message
+        message: message,
+        expert: this.data.selectedExpert?.id || 'default',
+        history: this.data.messages  // 发送所有历史消息
       },
       success: (res) => {
         const response = res.data.response;
@@ -99,6 +129,15 @@ Page({
           isLoading: false
         });
       }
+    });
+  },
+
+  backToSelection() {
+    this.setData({
+      selectedExpert: null,
+      skippedSelection: false,
+      // 不清空消息记录
+      inputMessage: ''
     });
   }
 }); 

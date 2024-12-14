@@ -6,8 +6,12 @@ __pycache__/
 
 # 环境配置
 .env
-.env.local
-.env.*.local
+.env.dev
+.env.test
+.env.prod
+.env.base
+.env.*.js
+!.env.example.js
 
 # 编辑器配置
 .idea/
