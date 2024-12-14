@@ -46,7 +46,7 @@ Page({
         ...this.data.messages,  // 保留现有消息
         {
           type: 'assistant',
-          content: '✨ 你好呀！我是你的算命助手，很高兴见到你！来问我点什么吧~ ✨'
+          content: '✨ 你好呀！我是你的小助手，很高兴见到你！来问我点什么吧~ ✨'
         }
       ]
     });

@@ -7,7 +7,7 @@
 
   <!-- 专家选择区域 -->
   <view class="expert-selection" wx:if="{{!selectedExpert && !skippedSelection}}">
-    <view class="section-title">选择您的算命大师</view>
+    <view class="section-title">选择心仪的大师</view>
     <scroll-view scroll-y="true" class="experts-list">
       <view class="expert-card" 
             wx:for="{{experts}}" 
